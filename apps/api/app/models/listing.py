@@ -28,3 +28,7 @@ class Listing(Base):
     building = relationship("Building", back_populates="listings")
     images = relationship("ListingImage", back_populates="listing", cascade="all, delete-orphan")
     tags = relationship("Tag", secondary=listing_tags, back_populates="listings")
+
+    @property
+    def building_name(self) -> str:
+        return self.building.name if self.building else ""
