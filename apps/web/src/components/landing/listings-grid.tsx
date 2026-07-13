@@ -1,14 +1,13 @@
 "use client";
 
 import { useListings } from "@/features/listing/hooks";
+import { useListingFilterStore } from "@/features/listing/filter-store";
+import { FilterBar } from "./filter-bar";
 import { ListingCard } from "./listing-card";
 
 export function ListingsGrid() {
-  // Trang chủ chỉ hiện căn còn trống/đang giữ chỗ, ưu tiên "available" lên đầu
-  const { data, isLoading, isError } = useListings({
-    page_size: 6,
-    sort: "created_desc",
-  });
+  const { filters } = useListingFilterStore();
+  const { data, isLoading, isError } = useListings(filters);
 
   // Lọc bỏ "sold" và sắp xếp available lên trước reserved (xử lý phía client
   // vì đây chỉ là trang chủ hiển thị nổi bật, không phải trang danh sách đầy đủ)
@@ -35,6 +34,8 @@ export function ListingsGrid() {
             với nhu cầu của bạn.
           </p>
         </div>
+
+        <FilterBar />
 
         {isLoading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
