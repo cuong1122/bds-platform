@@ -14,6 +14,11 @@ export function useListingDetail(id: number) {
     queryKey: ["listing", id],
     queryFn: () => fetchListingDetail(id),
     enabled: !!id,
+    retry: (failureCount, error: any) => {
+      // Không retry nếu lỗi 404 - thử lại cũng vô nghĩa
+      if (error?.response?.status === 404) return false;
+      return failureCount < 2;
+    },
   });
 }
 
