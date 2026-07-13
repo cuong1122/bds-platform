@@ -21,6 +21,8 @@ for b in buildings_data:
 db.commit()
 
 statuses = ["available", "reserved", "sold"]
+image_captions = ["Phòng khách", "Phòng ngủ chính", "Nhà bếp", "Ban công"]
+
 for idx, building in enumerate(buildings):
     for i in range(1, 8):
         listing = Listing(
@@ -33,16 +35,20 @@ for idx, building in enumerate(buildings):
             floor=i,
             direction="southeast",
             status=statuses[i % 3],
-            description=f"Căn hộ {chr(65+idx)}{100+i} view đẹp, thoáng mát",
+            description=f"Căn hộ {chr(65+idx)}{100+i} view đẹp, thoáng mát, thiết kế hiện đại phù hợp cho gia đình.",
         )
         db.add(listing)
         db.flush()
-        db.add(ListingImage(
-            listing_id=listing.id,
-            url="https://placehold.co/800x600",
-            order=0,
-            is_cover=True,
-        ))
+
+        # Mỗi listing có 4 ảnh mẫu
+        for img_idx, caption in enumerate(image_captions):
+            db.add(ListingImage(
+                listing_id=listing.id,
+                url=f"https://placehold.co/800x600/F4EBD8/8A6526?text={caption.replace(' ', '+')}",
+                order=img_idx,
+                is_cover=(img_idx == 0),
+                caption=caption,
+            ))
 
 db.commit()
 db.close()

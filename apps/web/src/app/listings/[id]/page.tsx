@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useListingDetail } from "@/features/listing/hooks";
+import { ImageGallery } from "@/components/landing/image-gallery";
 
 const STATUS_LABEL: Record<string, string> = {
   available: "Còn trống",
@@ -53,11 +54,6 @@ export default function ListingDetailPage() {
     );
   }
 
-  const coverImage =
-    listing.images.find((img) => img.is_cover)?.url ||
-    listing.images[0]?.url ||
-    "https://placehold.co/1200x700/F4EBD8/8A6526?text=Chua+co+anh";
-
   return (
     <main className="bg-cream min-h-screen pt-28 pb-24">
       <div className="max-w-[1280px] mx-auto px-10">
@@ -71,28 +67,7 @@ export default function ListingDetailPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12">
           {/* Ảnh chính */}
-          <div>
-            <div className="h-[480px] overflow-hidden mb-4">
-              <img
-                src={coverImage}
-                alt={listing.code}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {listing.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-3">
-                {listing.images.slice(1, 5).map((img) => (
-                  <div key={img.id} className="h-24 overflow-hidden">
-                    <img
-                      src={img.url}
-                      alt={img.caption || listing.code}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <ImageGallery images={listing.images} code={listing.code} />
 
           {/* Thông tin */}
           <div>
