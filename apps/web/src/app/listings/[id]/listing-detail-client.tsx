@@ -5,6 +5,7 @@ import { useListingDetail } from "@/features/listing/hooks";
 import { ImageGallery } from "@/components/landing/image-gallery";
 import { ShareButton } from "@/components/landing/share-button";
 import { useViewTracking } from "@/features/listing/use-view-tracking";
+import { FavoriteButton } from "@/components/landing/favorite-button";
 
 const STATUS_LABEL: Record<string, string> = {
   available: "Còn trống",
@@ -58,7 +59,6 @@ export default function ListingDetailClient({ id }: { id: number }) {
   return (
     <main className="bg-cream min-h-screen pt-28 pb-24">
       <div className="max-w-[1280px] mx-auto px-10">
-        {/* Breadcrumb */}
         <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => router.back()}
@@ -66,17 +66,21 @@ export default function ListingDetailClient({ id }: { id: number }) {
           >
             ← Quay lại
           </button>
-          <ShareButton
-            title={`Căn ${listing.code} - ${listing.building.name}`}
-            url={typeof window !== "undefined" ? window.location.href : ""}
-          />
+          <div className="flex items-center gap-3">
+            <FavoriteButton
+              listingId={listing.id}
+              className="border border-black/15 p-2.5 hover:border-gold transition-colors text-ink-soft"
+            />
+            <ShareButton
+              title={`Căn ${listing.code} - ${listing.building.name}`}
+              url={typeof window !== "undefined" ? window.location.href : ""}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12">
-          {/* Ảnh chính */}
           <ImageGallery images={listing.images} code={listing.code} />
 
-          {/* Thông tin */}
           <div>
             <div className="font-mono text-xs tracking-wide text-gold-dark uppercase mb-2">
               {listing.building.name} — {listing.building.address}
@@ -90,24 +94,16 @@ export default function ListingDetailClient({ id }: { id: number }) {
 
             <div className="grid grid-cols-2 gap-y-4 gap-x-6 mb-8 pb-8 border-b border-black/10">
               <InfoRow label="Diện tích" value={`${listing.area} m²`} />
-              <InfoRow
-                label="Trạng thái"
-                value={STATUS_LABEL[listing.status]}
-              />
+              <InfoRow label="Trạng thái" value={STATUS_LABEL[listing.status]} />
               {listing.bedrooms && (
                 <InfoRow label="Phòng ngủ" value={`${listing.bedrooms}`} />
               )}
               {listing.bathrooms && (
                 <InfoRow label="Phòng tắm" value={`${listing.bathrooms}`} />
               )}
-              {listing.floor && (
-                <InfoRow label="Tầng" value={`${listing.floor}`} />
-              )}
+              {listing.floor && <InfoRow label="Tầng" value={`${listing.floor}`} />}
               {listing.direction && (
-                <InfoRow
-                  label="Hướng"
-                  value={DIRECTION_LABEL[listing.direction]}
-                />
+                <InfoRow label="Hướng" value={DIRECTION_LABEL[listing.direction]} />
               )}
             </div>
 

@@ -5,5 +5,6 @@ from app.models.listing import Listing
 from app.models.listing_image import ListingImage
 from app.models.tag import Tag
 from app.models.listing_view import ListingView
+from app.models.favorite import Favorite
 
-__all__ = ["User", "Building", "Listing", "ListingImage", "Tag", "listing_tags", "ListingView"]
+__all__ = ["User", "Building", "Listing", "ListingImage", "Tag", "listing_tags", "ListingView", "Favorite"]

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ListingListItem } from "@/features/listing/types";
+import { FavoriteButton } from "@/components/landing/favorite-button";
 
 const STATUS_LABEL: Record<string, string> = {
   available: "Còn trống",
@@ -34,6 +35,10 @@ export function ListingCard({ listing }: { listing: ListingListItem }) {
           src={coverImage}
           alt={listing.code}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <FavoriteButton
+          listingId={listing.id}
+          className="absolute top-3 left-3 bg-ink/50 backdrop-blur-sm rounded-full p-2 hover:bg-ink/70 transition-colors z-10 text-white"
         />
         <span
           className={`absolute top-3 right-3 px-3 py-1 text-[11px] font-mono uppercase tracking-wide text-white ${STATUS_COLOR[listing.status]}`}
