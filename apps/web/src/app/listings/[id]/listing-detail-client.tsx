@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useListingDetail } from "@/features/listing/hooks";
 import { ImageGallery } from "@/components/landing/image-gallery";
 import { ShareButton } from "@/components/landing/share-button";
+import { useViewTracking } from "@/features/listing/use-view-tracking";
 
 const STATUS_LABEL: Record<string, string> = {
   available: "Còn trống",
@@ -29,6 +30,7 @@ function formatPrice(price: string): string {
 
 export default function ListingDetailClient({ id }: { id: number }) {
   const router = useRouter();
+  useViewTracking(id);
   const { data: listing, isLoading, isError } = useListingDetail(id);
 
   if (isLoading) {
