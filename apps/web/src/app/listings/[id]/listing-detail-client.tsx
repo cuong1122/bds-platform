@@ -6,6 +6,7 @@ import { ImageGallery } from "@/components/landing/image-gallery";
 import { ShareButton } from "@/components/landing/share-button";
 import { useViewTracking } from "@/features/listing/use-view-tracking";
 import { FavoriteButton } from "@/components/landing/favorite-button";
+import { ContactForm } from "@/components/landing/contact-form";
 
 const STATUS_LABEL: Record<string, string> = {
   available: "Còn trống",
@@ -118,9 +119,7 @@ export default function ListingDetailClient({ id }: { id: number }) {
               </div>
             )}
 
-            <button className="w-full py-4 bg-gold text-ink font-mono text-xs font-semibold uppercase tracking-wider hover:bg-gold-light transition-colors">
-              Đặt Lịch Xem Nhà
-            </button>
+            <ContactForm listingId={listing.id} />
           </div>
         </div>
       </div>

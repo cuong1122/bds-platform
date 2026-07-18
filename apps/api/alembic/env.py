@@ -12,7 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from app.core.config import settings
 from app.db.session import Base
 # import models here so Alembic sees them for autogenerate
-from app.models import user, building, listing_tag, listing, listing_image, tag, listing_view, favorite
+from app.models import user, building, listing_tag, listing, listing_image, tag, listing_view, favorite, inquiry
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.database_url)
