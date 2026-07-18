@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from app.db.session import Base
@@ -15,4 +16,7 @@ class Inquiry(Base):
     email = Column(String, nullable=True)
     preferred_time = Column(String, nullable=True)
     message = Column(Text, nullable=True)
+    is_confirmed = Column(Boolean, nullable=False, default=False, server_default="false")
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
+
+    listing = relationship("Listing")
