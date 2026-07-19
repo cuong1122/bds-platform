@@ -11,6 +11,7 @@ import {
 import { useAdminBuildings } from "@/features/admin/buildings-hooks";
 import type { ListingAdmin, ListingFormValues } from "@/features/admin/listings-api";
 import type { ListingStatus, Direction } from "@/features/listing/types";
+import { uploadImage } from "@/features/admin/upload-api";
 import { RequireAuth } from "@/components/admin/require-auth";
 import { LogoutButton } from "@/components/admin/logout-button";
 
@@ -125,6 +126,28 @@ function ListingsManager() {
 
   const removeImageField = (index: number) => {
     setForm({ ...form, image_urls: form.image_urls.filter((_, i) => i !== index) });
+  };
+
+  const [uploadingIndexes, setUploadingIndexes] = useState<Set<number>>(new Set());
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleFileSelect = async (index: number, file: File | undefined) => {
+    if (!file) return;
+    setUploadError(null);
+    setUploadingIndexes((prev) => new Set(prev).add(index));
+    try {
+      const url = await uploadImage(file);
+      updateImageField(index, url);
+    } catch (err: any) {
+      const message = err?.response?.data?.detail || "Tải ảnh lên thất bại, vui lòng thử lại";
+      setUploadError(typeof message === "string" ? message : "Tải ảnh lên thất bại");
+    } finally {
+      setUploadingIndexes((prev) => {
+        const next = new Set(prev);
+        next.delete(index);
+        return next;
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -334,11 +357,21 @@ function ListingsManager() {
                       {idx === 0 ? "Bìa" : `#${idx + 1}`}
                     </span>
                     <input
-                      placeholder="https://..."
+                      placeholder="https://... (hoặc bấm Tải ảnh)"
                       value={url}
                       onChange={(e) => updateImageField(idx, e.target.value)}
                       className="flex-1 border border-black/15 px-4 py-2 text-sm focus:outline-none focus:border-gold"
                     />
+                    <label className="text-xs font-mono uppercase text-gold-dark hover:underline cursor-pointer shrink-0 whitespace-nowrap">
+                      {uploadingIndexes.has(idx) ? "Đang tải..." : "Tải ảnh"}
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        className="hidden"
+                        disabled={uploadingIndexes.has(idx)}
+                        onChange={(e) => handleFileSelect(idx, e.target.files?.[0])}
+                      />
+                    </label>
                     <button
                       type="button"
                       onClick={() => removeImageField(idx)}
@@ -351,6 +384,7 @@ function ListingsManager() {
               </div>
             </div>
 
+            {uploadError && <p className="text-red-600 text-sm">{uploadError}</p>}
             {formError && <p className="text-red-600 text-sm">{formError}</p>}
 
             <button
