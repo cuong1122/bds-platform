@@ -3,6 +3,7 @@
 import { useInquiries, useUpdateInquiryConfirmation, useListingsInterest } from "@/features/admin/hooks";
 import { RequireAuth } from "@/components/admin/require-auth";
 import { LogoutButton } from "@/components/admin/logout-button";
+import Link from "next/link";
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleString("vi-VN");
@@ -21,9 +22,24 @@ function AdminDashboard() {
             <h1 className="font-display font-medium text-3xl text-ink mb-1">
               Bảng Quản Trị
             </h1>
-            <p className="text-slate text-sm">
+            <p className="text-slate text-sm mb-3">
               Quản lý lịch hẹn xem nhà và theo dõi mức độ quan tâm.
             </p>
+            <div className="flex gap-3">
+              <Link
+                href="/admin/buildings"
+                className="text-xs font-mono uppercase tracking-wide text-gold-dark hover:underline"
+              >
+                Quản Lý Tòa Nhà
+              </Link>
+              <span className="text-slate">·</span>
+              <Link
+                href="/admin/listings"
+                className="text-xs font-mono uppercase tracking-wide text-gold-dark hover:underline"
+              >
+                Quản Lý Căn Hộ
+              </Link>
+            </div>
           </div>
           <LogoutButton />
         </div>
